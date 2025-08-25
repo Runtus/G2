@@ -90,3 +90,4 @@ export { issue6093 } from './issue-6093';
 export { multipleInteractionsCoexist } from './multiple-interactions-coexist';
 export { penguinsPointBrushFilterNoMove } from './penguins-point-brush-filter-no-move';
 export { stateAgesSankeyHighlight } from './stateages-sankey-highlight';
+export { hanlin } from './hanlin';

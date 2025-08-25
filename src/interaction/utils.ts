@@ -42,6 +42,7 @@ export function selectFacetViews(target, viewInstances) {
 }
 
 export function selectPlotArea(root: DisplayObject): DisplayObject {
+  console.log(select(root));
   return select(root).select(`.${PLOT_CLASS_NAME}`).node();
 }
 
@@ -545,10 +546,17 @@ export function renderBackground({
       padding,
       lineWidth,
     };
+    // TODO 最终渲染的逻辑在这里
     const shapeOf = isOrdinalShape() ? bandShapeOf : cloneShapeOf;
     const shape = shapeOf(element, finalStyle);
     shape.className = BACKGROUND_CLASS_NAME;
-    element.parentNode.parentNode.appendChild(shape);
+    console.log('element', element);
+    if (element.children.length) {
+      element.children[0].appendChild(shape);
+    } else {
+      element.parentNode.parentNode.appendChild(shape);
+    }
+
     element.background = shape;
   };
 

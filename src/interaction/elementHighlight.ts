@@ -3,6 +3,7 @@ import { deepMix } from '@antv/util';
 import { group } from '@antv/vendor/d3-array';
 import { subObject } from '../utils/helper';
 import {
+  bboxOf,
   createDatumof,
   createFindElementByEvent,
   createUseState,
@@ -41,6 +42,8 @@ export function elementHighlight(
 ) {
   const allElements = elementsof(root) ?? [];
   const elements = region ? allElements.filter(regionEleFilter) : allElements;
+  console.log('region', region);
+  console.log('elements', elements);
   const elementSet = new Set(elements);
   const groupKey = region ? regionGroupKey : eleGroupKey;
   const keyGroup = group(elements, groupKey);
@@ -50,6 +53,8 @@ export function elementHighlight(
     coordinate,
     scale,
   });
+
+  console.log('root', root);
 
   const valueof = createValueof(elements, datum);
   const [appendLink, removeLink] = renderLink({
@@ -89,10 +94,13 @@ export function elementHighlight(
   const pointerover = (event) => {
     const { nativeEvent = true } = event;
     let element = event.target;
+
     if (region) {
       element = findElement(event);
     }
+    appendBackground(element);
     if (!elementSet.has(element)) return;
+
     if (out) clearTimeout(out);
     const k = groupKey(element);
     const group = keyGroup.get(k);
@@ -106,7 +114,7 @@ export function elementHighlight(
       }
       if (e !== element) removeBackground(e);
     }
-    appendBackground(element);
+
     appendLink(group);
 
     // Emit events.
@@ -207,7 +215,10 @@ export function ElementHighlight({
   return (context, _, emitter) => {
     const { container, view, options } = context;
     const { scale, coordinate } = view;
+
     const plotArea = selectPlotArea(container);
+
+    console.log('container', container);
 
     return elementHighlight(plotArea, {
       elements: selectG2Elements,
